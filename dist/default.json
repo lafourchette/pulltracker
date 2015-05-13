@@ -1,0 +1,12 @@
+{
+    "github":{
+        "authenticate": {
+            "type": "oauth",
+            "token": "your-token"
+        },
+        "organisation": "your-org"
+    },
+    "repositoryWhiteList": [
+        "some repo you want to filter"
+    ]
+}

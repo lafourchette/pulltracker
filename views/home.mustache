@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .github-avatar{
+            width: 64px; height: 64px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    {{#repositories}}
+        <h3>{{name}}</h3>
+        {{#pullRequests}}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                      <div class="col-xs-2">
+                        <a href="#">
+                            {{#user.avatar_url}}
+                            <img class="img-thumbnail github-avatar" src="{{user.avatar_url}}" alt="{{user.login}}">
+                            {{/user.avatar_url}}
+                        </a>
+                      </div>
+                      <div class="col-xs-10">
+                        <b>{{number}}</b> {{title}}<br />
+                        {{body}}<br />
+                        {{#labels}}
+                            <span class="label" style="background-color:#{{color}}">{{name}}</span>
+                        {{/labels}}
+                      </div>
+                    </div>
+                </div>
+            </div>
+        {{/pullRequests}}
+    {{/repositories}}
+    </div>
+
+    <script src="js/bundle.js"></script>
+</body>
+</html>
