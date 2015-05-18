@@ -1,5 +1,9 @@
 Provides an interface enumerating all Pull Requests.
 
+![Screenshot](screenshot.png)
+
+Your team review PRs and tag them. If a PR got >= 2 tags, then it is displayed on a green background.
+
 ## With docker
 ```bash
 # Building the docker image
