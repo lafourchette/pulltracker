@@ -58,23 +58,36 @@ cache.get('repositories', function( err, value ){
                         if(err){
                             debug('err ' + err);
                         }
-                        githubPullRequests.forEach(function(githubPullRequest){
-                            debug('githubPullRequest ' + githubPullRequest.number);
-                            // Fetch labels
-                            github.issues.getIssueLabels({
-                                user: organisation,
-                                repo: githubRepository.name,
-                                number: githubPullRequest.number
-                            }, function(err, githubLabels) {
-                                if(err){
-                                    debug('err ' + err);
-                                }
-                                githubPullRequest.labels = githubLabels;
-                                debug('found ' + githubLabels.length + ' labels');
-                                pullRequests.push(githubPullRequest);
+                        if(githubPullRequests){
+                            githubPullRequests.forEach(function(githubPullRequest){
+                                debug('githubPullRequest ' + githubPullRequest.number);
+                                // Fetch labels
+                                github.issues.getIssueLabels({
+                                    user: organisation,
+                                    repo: githubRepository.name,
+                                    number: githubPullRequest.number
+                                }, function(err, githubLabels) {
+                                    if(err){
+                                        debug('err ' + err);
+                                    }
+                                    githubPullRequest.labels = githubLabels;
+                                    var readCount = 0;
+                                    if(githubPullRequest){
+                                        githubLabels.forEach(function(label){
+                                            if(-1 !== label.name.indexOf('Lu')){
+                                                readCount++;
+                                            }
+                                        });
+                                    }
+                                    githubPullRequest.gotTwoReads = readCount >= 2;
+                                    debug('found ' + githubLabels.length + ' labels');
+                                    pullRequests.push(githubPullRequest);
+                                });
                             });
-                        });
+                        }
                     });
+                    // this sort does not work
+                    // pullRequests.sort(function(b, a){return new Date(a.created_at) - new Date(b.created_at)});
                     githubRepository.pullRequests = pullRequests;
                     repositories.push(githubRepository);
                 });
@@ -96,10 +109,9 @@ app.set('view engine', 'mustache');
 app.set('views', __dirname + '/views');
  
 app.get('/', function(req, res) {
-    console.log(repositories);
     res.render('home', {repositories: repositories});
 });
-app.get('/flush', function(req, res) {
+app.get('/flush', function() {
     cache.flushAll();
     debug('flushed');
 });

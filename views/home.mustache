@@ -3,41 +3,80 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
         .github-avatar{
-            width: 64px; height: 64px;
+            width: 16px; height: 16px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .table-list {
+            display: table;
+            table-layout: fixed;
+            width: 100%;
+            color: #999;
+        }
+        .table-list-item {
+            position: relative;
+            list-style: none;
+            display: table-row;
+        }
+        .issue-title {
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .issue-title-link {
+            padding-right: 3px;
+            margin-bottom: 2px;
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 1.2;
+            color: #333;
+        }
+        .issue-meta {
+            margin-top: 1px;
+            margin-bottom: 2px;
+            font-weight: normal;
+            color: #999;
+        }
+        a {
+            color: #4183c4;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
+
     {{#repositories}}
-        <h3>{{name}}</h3>
-        {{#pullRequests}}
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="row">
-                      <div class="col-xs-2">
-                        <a href="#">
-                            {{#user.avatar_url}}
-                            <img class="img-thumbnail github-avatar" src="{{user.avatar_url}}" alt="{{user.login}}">
-                            {{/user.avatar_url}}
-                        </a>
-                      </div>
-                      <div class="col-xs-10">
-                        <b>{{number}}</b> {{title}}<br />
-                        {{body}}<br />
-                        {{#labels}}
-                            <span class="label" style="background-color:#{{color}}">{{name}}</span>
-                        {{/labels}}
-                      </div>
+        <h3><a href="{{html_url}}/pulls" target="_blank">{{name}}</a></h3>
+        <ul class="table-list table-list-bordered table-list-issues">
+            {{#pullRequests}}
+            <li class="selectable unread table-list-item">
+                <div class="table-list-cell issue-title {{#gotTwoReads}}bg-success{{/gotTwoReads}}">
+                    <a href="{{html_url}}" class="issue-title-link js-navigation-open">
+                        {{title}}
+                    </a>
+                    {{#labels}}
+                        <span class="label" style="background-color:#{{color}}">{{name}}</span>
+                    {{/labels}}
+                    <div class="issue-meta">
+                        <span class="issue-meta-section opened-by">
+                            {{number}}
+                            opened <time datetime="{{created_at}}">{{created_at}}</time> by
+                            <a href="#">
+                                {{user.login}}
+                                {{#user.avatar_url}}
+                                    <img class="github-avatar" src="{{user.avatar_url}}" alt="{{user.login}}">
+                                {{/user.avatar_url}}
+                            </a>
+                        </span>
                     </div>
                 </div>
-            </div>
-        {{/pullRequests}}
+            </li>
+            {{/pullRequests}}
+        </ul>
     {{/repositories}}
-    </div>
-
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="js/moment.min.js"></script>
     <script src="js/bundle.js"></script>
 </body>
 </html>
